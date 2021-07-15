@@ -1,6 +1,43 @@
 # ml-benchmarking-resources
 Notebooks and documentation for generating results figures for ML Benchmarking of large human microbiome datasets. 
 
+### Links
+[Private link to ML Benchmarking Manuscript outline](https://docs.google.com/document/d/1Jq_JWOTeUNFgRxiokDgai_2WRoIyny_32ajOhJ0UsAc/edit?usp=sharing) _please request access_
+
+[Private link to full (unformatted) text of thesis](https://docs.google.com/document/d/1m3jhGqpkqILfhm8qqIfTDrg2MLY5hdQg5CtdFhpa5VI/edit?usp=sharing) _please request access_
+
+[Repository for thesis LaTeX files](https://www.overleaf.com/read/fyrynncfhwvj) _readonly_
+
+## Generating Results (q2-mlab plugin and usage)
+Results for this benchmarking were generated using the Python module `q2-mlab`. When installed, it can be used as a QIIME2 plugin. For this benchmarking, we used the assistance of some Python methods and bash scripts to compartmentalize the command flow. 
+TODO: Add details about the file organization in '/projects/ibm_aihl/ML-benchmark/' which these scripts depend on.
+
+1. Preprocess
+
+Dataset preprocessing and organizing the file structure required for the following steps.
+See template script in [`generating_results/preprocess_template.sh`](generating_results/preprocess_template.sh)
+
+2. Orchestrator
+
+Setting up job scripts to run on HPC (specifically the Knight Lab cluster)
+See template script in [`generating_results/orchestrator_template.sh`](generating_results/orchestrator_template.sh)
+
+4. Doctor
+
+Identify missing results due to incomplete jobs or errors in jobs, and output a script to re-submit those jobs.
+See template script in [`generating_results/doctor_template.sh`](generating_results/doctor_template.sh)
+ 
+5. Collecting results into database (TODO)
+ 
+## Figures
+The first set of figures, as well as the null models, are generated from each datasets' metadata.
+The notebook for that can be found at [`1_DatasetDescriptiveFigures_TargetDistributionAndNullModels`](1_DatasetDescriptiveFigures_TargetDistributionAndNullModels) and uses the dataset metadata organized under `/projects/ibm_aihl/ML-benchmark/processed/`
+
+The second set of figures use the standard deviation and null models from the first notebook, as well as the results database.
+The results database can be accessed on the Knight Lab cluster at: `/projects/ibm_aihl/ML-benchmark/full_db_1000-february.sqlite3`.
+The notebook is at [`2_FiguresFromResultsDatabase`](2_FiguresFromResultsDatabase).
+
+
 ## Methods
 #### Preprocessing
 For each target phenotype and data preparation (16S and metagenomics), identical quality control and preprocessing steps are carried out. We first filter samples containing missing values in the target phenotype, and then filter low-abundance features with fewer than ten counts. Feature tables are rarefied to a uniform sampling depth of 1000.
@@ -10,31 +47,4 @@ To carry out this benchmarking at scale, we developed a source-controlled and un
 
 #### Procrustes
 A Procrustes analysis of disparity allows for comparisons between the shapes of two matrices. For this we conducted our analysis using the Procrustes method in SciPy 1.6.1. We computed Procrustes disparity on a per-algorithm basis for between-preparation disparity where the rows in the two matrices are matched hyperparameter sets in 16S data and metagenomics data. Each row contains the coordinates of that hyperparameter’s performance as mean MAE and variance in MAE. Between-dataset disparity was computed similarly but with matched hyperparameter sets between pairs of our three datasets. A null distribution is calculated by randomly shuffling the row order of the matrices 100 times, computing the disparity on the shuffled matrices, and taking the average disparity.
-
-### Links
-[Private link to ML Benchmarking Manuscript outline](https://docs.google.com/document/d/1Jq_JWOTeUNFgRxiokDgai_2WRoIyny_32ajOhJ0UsAc/edit?usp=sharing) _please request access_
-[Private link to full (unformatted) text of thesis](https://docs.google.com/document/d/1m3jhGqpkqILfhm8qqIfTDrg2MLY5hdQg5CtdFhpa5VI/edit?usp=sharing) _please request access_
-[Repository for thesis LaTeX files](https://www.overleaf.com/read/fyrynncfhwvj) _readonly_
-
-## Generating Results (q2-mlab plugin and usage)
-Results for this benchmarking were generated using the Python module `q2-mlab`. When installed, it can be used as a QIIME2 plugin. For this benchmarking, we used the assistance of some Python methods and bash scripts to compartmentalize the command flow. 
-1. Preprocess
-  See template script in [`generating_results/preprocess_template.sh`](generating_results/preprocess_template.sh)
-
-2. Orchestrator
-
-   See template script in [`generating_results/orchestrator_template.sh`](generating_results/orchestrator_template.sh)
-
-3. Submitting jobs to Barnacle (or other Torque-based HPC cluster)
-
-4. Doctor
-
-5. See template script in [`generating_results/doctor_template.sh`](generating_results/doctor_template.sh)
-## Figures
-
-
-
-### Result database access
-
-
 
