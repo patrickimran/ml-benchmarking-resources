@@ -27,7 +27,7 @@ See template script in [`generating_results/orchestrator_template.sh`](generatin
 Identify missing results due to incomplete jobs or errors in jobs, and output a script to re-submit those jobs.
 See template script in [`generating_results/doctor_template.sh`](generating_results/doctor_template.sh)
  
-5. Collecting results into database (TODO)
+5. Collecting results into database (Collector)
  
 ## Figures
 The first set of figures, as well as the null models, are generated from each datasets' metadata.
